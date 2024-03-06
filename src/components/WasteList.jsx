@@ -5,7 +5,7 @@ const WasteList = () => {
   const [waste, setwaste] = useState([])
 
   useEffect(() => {
-    
+
     async function loadWaste() {
       const res = await getWasteList();
       setwaste(res.data);
@@ -14,7 +14,7 @@ const WasteList = () => {
     loadWaste();
 
   }, []);
-  
+
 
   return (
     <div>

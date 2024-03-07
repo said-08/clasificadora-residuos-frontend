@@ -1,12 +1,19 @@
-import { useState } from "react";
+/* eslint-disable no-unused-vars */
+import { useEffect, useState } from "react";
+import { addWasteImage } from "../api/waste.api";
 
 function AddImage() {
-
+  const [desc, setDesc] = useState('');
   const [images, setImages] = useState([]);
+  const [formData, setformData] = useState({
+    description: '',
+    img: ''
+  })
 
   const handleImageChange = (event) => {
     const files = event.target.files;
-    console.log("iamgs",files)
+    console.log("IMAGAENASD", images)
+    console.log("iamgs", files)
     const newImages = Array.from(files).map(file => ({
       url: URL.createObjectURL(file),
       name: file.name,
@@ -14,14 +21,44 @@ function AddImage() {
       size: file.size > 1024 ? file.size > 1048576 ? Math.round(file.size / 1048576) + 'mb' : Math.round(file.size / 1024) + 'kb' : file.size + 'b'
     }));
     setImages(newImages);
+    setformData(prevState => ({
+      ...prevState,
+      img: files[0]
+    }));
   };
+
+  const handleSubmit = async () => {
+    if (images.length > 0) {
+      console.log(formData)
+        const config = { headers: { 'Content-Type': 'multipart/form-data' }}
+        // const formDatas = new FormData();
+        // formDatas.append('img', formData.img[0].url); // Solo agregamos la primera imagen
+        // formDatas.append('description', form); // Solo agregamos la primera imagen
+        const res = await addWasteImage({
+          'img': formData.img,
+          'description': formData.description
+        }, config);
+        console.log("image", res);
+    } else {
+      console.warn("No se ha seleccionado ninguna imagen");
+    }
+  };
+
+  const handleText = (e) => {
+    const text = e.target.value;
+    setDesc(e.target.value);
+    setformData(prevState => ({
+      ...prevState,
+      'description': text
+    }));
+  }
 
   return (
     // eslint-disable-next-line react/no-unknown-property
     <div className="shadow p-4 py-8" x-data="{ images: [] }">
       <div className="heading text-center font-bold text-2xl m-5 text-white">New Image</div>
       <div className="editor mx-auto w-10/12 flex flex-col text-gray-800 border border-gray-300 p-4 shadow-lg max-w-2xl">
-        <textarea className="description sec p-3 bg-[#202020] text-yellow-50 h-60 border border-gray-300 outline-none" spellCheck="false" placeholder="Describe la imagen de residuos (opcional)"></textarea>
+        <textarea onChange={(e) => handleText(e)} className="description sec p-3 bg-[#202020] text-yellow-50 h-60 border border-gray-300 outline-none" spellCheck="false" placeholder="Describe la imagen de residuos (opcional)"></textarea>
 
         {/* Icons */}
         <div className="icons flex text-gray-500 m-2">
@@ -52,7 +89,7 @@ function AddImage() {
         </div>
 
         <div className="buttons flex justify-end">
-          <div className="btn border border-indigo-500 p-1 px-4 font-semibold cursor-pointer text-gray-200 ml-2 bg-indigo-500">Clasificar</div>
+          <div onClick={handleSubmit} className="btn border border-indigo-500 p-1 px-4 font-semibold cursor-pointer text-gray-200 ml-2 bg-indigo-500">Clasificar</div>
         </div>
       </div>
     </div>

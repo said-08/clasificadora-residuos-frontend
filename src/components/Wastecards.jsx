@@ -12,7 +12,12 @@ const WasteCards = ({ list }) => {
       </div>
       <div className="flex justify-center">
         {list.map((item, index) => (
-          <div key={index} className="block rounded-lg bg-white w-72 mx-4">
+          <div
+            key={index}
+            className={`block rounded-lg w-72 mx-4 ${
+              item.label === "verde" ? "bg-green-500" : item.label === "blanco" ? "bg-white" : "bg-gray-500"
+            }`}
+          >
             <div className="relative overflow-hidden bg-cover bg-no-repeat" data-te-ripple-init data-te-ripple-color="light">
               <img className="rounded-lg sm:m-h-64 md:h-64 w-full" src={item.img} alt="" />
               <a href="#!">
@@ -24,11 +29,9 @@ const WasteCards = ({ list }) => {
             <div className="p-2">
               <div className="flex justify-between">
                 <h5 className="mb-2 text-sm font-bold leading-tight text-neutral-800 dark:text-neutral-50">
-                  RESIDUO DETECTADO: {item.description}
+                  DESCRIPCIÓN: {item.description}
                 </h5>
-                <h5 className="mb-2 text-sm font-bold leading-tight text-neutral-800 dark:text-neutral-50 flex">
-                  COLOR DE CLASIFICACIÓN: {item.label}
-                </h5>
+                
               </div>
             </div>
           </div>

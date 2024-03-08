@@ -24,8 +24,8 @@ const WasteList = () => {
     async function loadWaste() {
       const res = await getWasteList();
       setwaste(res.data);
+      console.log("DEVERDAD",waste)
     }
-
     loadWaste();
 
   }, []);

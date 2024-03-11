@@ -2,8 +2,10 @@
 /* eslint-disable no-unused-vars */
 import { useEffect, useState } from "react";
 import { addWasteImage } from "../api/waste.api";
+import Loader from "../components/Loader";
 
 function AddImage() {
+  const [loading, setloading] = useState(false)
   const [desc, setDesc] = useState('');
   const [main, setMain] = useState('')
   const [images, setImages] = useState([]);
@@ -32,18 +34,19 @@ function AddImage() {
 
   const handleSubmit = async () => {
     if (images.length > 0) {
-      console.log(formData)
-        const config = { headers: { 'Content-Type': 'multipart/form-data' }}
-        // const formDatas = new FormData();
-        // formDatas.append('img', formData.img[0].url); // Solo agregamos la primera imagen
-        // formDatas.append('description', form); // Solo agregamos la primera imagen
+      setloading(true);
+      const config = { headers: { 'Content-Type': 'multipart/form-data' }};
+      try {
         const res = await addWasteImage({
           'img': formData.img,
           'description': formData.description
         }, config);
-        console.log("image", res);
-        setMain(res.data.label)
-        setOpen(true)
+        setMain(res.data.label);
+        setloading(false);
+        setOpen(true);
+      } catch (error) {
+        console.error("Error al enviar la imagen al backend:", error);
+      } 
     } else {
       console.warn("No se ha seleccionado ninguna imagen");
     }
@@ -88,7 +91,7 @@ function AddImage() {
                 </svg>
               )}
               <button onClick={() => setImages(images.filter((_, i) => i !== index))} className="w-6 h-6 absolute text-center flex items-center top-0 right-0 m-2 text-white text-lg bg-red-500 hover:text-red-700 hover:bg-gray-100 rounded-full p-1"><span className="mx-auto">×</span></button>
-              <div className="text-xs text-center p-2">{image.size}</div>
+              <div className="text-xs text-white text-center p-2">{image.size}</div>
             </div>
           ))}
         </div>
@@ -96,6 +99,9 @@ function AddImage() {
           <div onClick={handleSubmit} className="btn border border-indigo-500 rounded-lg p-1 px-4 active:scale-[.97] font-semibold cursor-pointer text-gray-200 ml-2 bg-indigo-500">Clasificar</div>
         </div>
       </div>
+
+      {loading && <Loader />}
+
       {
         main && (
           open && (

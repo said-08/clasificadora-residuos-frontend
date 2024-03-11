@@ -4,27 +4,13 @@ import WasteCards from "./Wastecards";
 
 const WasteList = () => {
   const [waste, setwaste] = useState([])
-//   const array = [
-//     {
-//         "id": 1,
-//         "img": "https://lavaquita.co/cdn/shop/products/76b6170a-f1e1-4a92-8622-cee94a659b91_669x669.png?v=1622197616",
-//         "description": "banana",
-//         "label": "verde"
-//     },
-//     {
-//         "id": 2,
-//         "img": "https://abdc.es/wp-content/uploads/2022/01/residuos-reciclables-1536x821.jpeg",
-//         "description": "reciclable",
-//         "label": "blanco"
-//     }
-// ]
 
   useEffect(() => {
 
     async function loadWaste() {
       const res = await getWasteList();
       setwaste(res.data);
-      console.log("DEVERDAD",waste)
+      console.log("DEVERDAD", waste)
     }
     loadWaste();
 
@@ -32,17 +18,25 @@ const WasteList = () => {
 
 
   return (
-    <div className="flex ">
-      <WasteCards list={waste}/>
-      {/* {
-        waste.map((t) => (
-          <div key={t.id}>
-          <img src={t.img} alt="" />
-          <p>{t.description}</p>
-          <p>{t.label}</p>
+    <div className="flex flex-col min-h-screen bg-gray-505 text-white">
+      <div className="container mx-auto mt-12 mb-8 text-center">
+        <h1 className="text-3xl font-semibold mb-4">CLASIFICACIÓN DE RESIDUOS</h1>
+        <div className="flex justify-center">
+          <div className="flex items-center mr-6">
+            <div className="w-8 h-8 bg-green-500 rounded-full mr-2"></div>
+            <span className="font-semibold text-white">Orgánicos</span>
           </div>
-        ))
-      } */}
+          <div className="flex items-center mr-6">
+            <div className="w-8 h-8 bg-white rounded-full mr-2"></div>
+            <span className="font-semibold text-white">Plásticos</span>
+          </div>
+          <div className="flex items-center">
+            <div className="w-8 h-8 bg-black rounded-full mr-2"></div>
+            <span className="font-semibold text-white">No aprovechables</span>
+          </div>
+        </div>
+      </div>
+      <WasteCards list={waste} />
     </div>
   )
 }
